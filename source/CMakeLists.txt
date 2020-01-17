@@ -26,3 +26,4 @@ target_link_libraries( ${TARGET_NAME}
 target_include_directories( ${TARGET_NAME} PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}
   )
+configure_file( ${DISCORD_SDK_SHARED_LIB} ${CMAKE_CURRENT_BINARY_DIR} COPYONLY )

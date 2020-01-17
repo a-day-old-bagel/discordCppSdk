@@ -14,11 +14,13 @@ enable_cxx_compiler_flag_if_supported( "-w" )
 
 add_library(${TARGET_PREFIX}_sdk SHARED IMPORTED)
 if ( WIN32 )
+  set( DISCORD_SDK_SHARED_LIB ${CMAKE_CURRENT_SOURCE_DIR}/discord_game_sdk.dll PARENT_SCOPE )
   set_property(TARGET ${TARGET_PREFIX}_sdk PROPERTY IMPORTED_LOCATION
-    ${CMAKE_CURRENT_SOURCE_DIR}/discord_game_sdk.dll)
+    ${CMAKE_BINARY_DIR}/source/discord_game_sdk.dll)
 else ( WIN32 )
+  set( DISCORD_SDK_SHARED_LIB ${CMAKE_CURRENT_SOURCE_DIR}/discord_game_sdk.so PARENT_SCOPE )
   set_property(TARGET ${TARGET_PREFIX}_sdk PROPERTY IMPORTED_LOCATION
-    ${CMAKE_CURRENT_SOURCE_DIR}/discord_game_sdk.so)
+    ${CMAKE_BINARY_DIR}/source/discord_game_sdk.so)
 endif ( WIN32 )
 extern( link ${TARGET_PREFIX}_sdk )
 
