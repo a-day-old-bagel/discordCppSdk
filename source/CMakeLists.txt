@@ -21,7 +21,7 @@ add_library( ${TARGET_NAME} SHARED
   voice_manager.cpp voice_manager.h
   )
 target_link_libraries( ${TARGET_NAME}
-  
+  ${TARGET_PREFIX}_extern_interface
   )
 target_include_directories( ${TARGET_NAME} PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}

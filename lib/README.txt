@@ -1,0 +1,1 @@
+All Windows binaries are 64-bit only.
