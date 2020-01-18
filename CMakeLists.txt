@@ -21,10 +21,10 @@ set_property( GLOBAL PROPERTY USE_FOLDERS ON )
 # Introduce functions to help link to external libs
 include( helpers.cmake )
 
-# Build the SDK library
-add_subdirectory( lib )
+# Build shared libs
 add_subdirectory( source )
 
+# Optionally build the example(s)
 option( DISCORD_BUILD_EXAMPLES "Build Examples"	ON )
 if ( DISCORD_BUILD_EXAMPLES )
   add_subdirectory( example )
