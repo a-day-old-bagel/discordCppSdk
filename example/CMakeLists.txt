@@ -21,4 +21,8 @@ else ( WIN32 )
       COMMAND ${CMAKE_COMMAND} -E copy_if_different
       "${PROJECT_BINARY_DIR}/source/discord.so"
       $<TARGET_FILE_DIR:${TARGET_NAME}>)
+  add_custom_command(TARGET ${TARGET_NAME}_discord_test POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy_if_different
+      "${PROJECT_BINARY_DIR}/source/discord_game_sdk.so"
+      $<TARGET_FILE_DIR:${TARGET_NAME}_discord_test>)
 endif ( WIN32 )
