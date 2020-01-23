@@ -1,21 +1,28 @@
 set( CMAKE_FOLDER source )
 set( TARGET_NAME ${TARGET_PREFIX} )
 
-add_library( ${TARGET_NAME}_game_sdk MODULE IMPORTED)
+set( SDK_LIB_DIR ${CMAKE_CURRENT_BINARY_DIR} )
+add_library( ${TARGET_NAME}_game_sdk_lib SHARED IMPORTED GLOBAL )
 if ( WIN32 )
-  configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/discord_game_sdk.lib ${CMAKE_CURRENT_BINARY_DIR} COPYONLY )
-  configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/discord_game_sdk.dll ${CMAKE_CURRENT_BINARY_DIR} COPYONLY )
-  set_target_properties( ${TARGET_NAME}_game_sdk PROPERTIES
-      IMPORTED_LOCATION ${CMAKE_CURRENT_BINARY_DIR}/discord_game_sdk.lib
+  configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/discord_game_sdk.lib
+    ${SDK_LIB_DIR}/discord_game_sdk.lib COPYONLY
+    )
+  configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/discord_game_sdk.dll
+    ${SDK_LIB_DIR}/discord_game_sdk.dll COPYONLY
+    )
+  set_target_properties( ${TARGET_NAME}_game_sdk_lib PROPERTIES
+      IMPORTED_LOCATION ${SDK_LIB_DIR}/discord_game_sdk.lib
       )
   include( GenerateExportHeader )
 else ( WIN32 )
-  configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/discord_game_sdk.so ${CMAKE_CURRENT_BINARY_DIR} COPYONLY )
-  set_target_properties( ${TARGET_NAME}_game_sdk PROPERTIES
-      IMPORTED_LOCATION ${CMAKE_CURRENT_BINARY_DIR}/discord_game_sdk.so
+  configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/discord_game_sdk.so
+    ${SDK_LIB_DIR}/discord_game_sdk.so COPYONLY
+    )
+  set_target_properties( ${TARGET_NAME}_game_sdk_lib PROPERTIES
+      IMPORTED_LOCATION ${SDK_LIB_DIR}/discord_game_sdk.so
       )
 endif ( WIN32 )
-extern( link ${TARGET_NAME}_game_sdk )
+extern( link ${TARGET_NAME}_game_sdk_lib )
 extern( include ${CMAKE_CURRENT_SOURCE_DIR} )
 extern( finish )
 
@@ -38,8 +45,8 @@ add_library( ${TARGET_NAME} SHARED
   user_manager.cpp user_manager.h
   voice_manager.cpp voice_manager.h
   )
-target_link_libraries( ${TARGET_NAME}
-  ${TARGET_NAME}_game_sdk
+target_link_libraries( ${TARGET_NAME} PRIVATE
+  ${TARGET_NAME}_game_sdk_lib
   )
 target_include_directories( ${TARGET_NAME} PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}
