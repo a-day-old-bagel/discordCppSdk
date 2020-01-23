@@ -15,6 +15,20 @@ set( CMAKE_CXX_STANDARD_REQUIRED ON )
 project( discord VERSION 0.01.01.01 LANGUAGES CXX C )
 set( TARGET_PREFIX ${PROJECT_NAME} )
 
+# Attempt support for cross-compile builds for windows
+if( CROSS_COMPILE_FOR_WINDOWS )
+  message( "Cross Compiling for Windows with MinGW 64-bit" )
+  set( CMAKE_SYSTEM_NAME Windows )
+  set( CMAKE_C_COMPILER x86_64-w64-mingw32-gcc )
+  set( CMAKE_CXX_COMPILER x86_64-w64-mingw32-g++ )
+  set( CMAKE_RC_COMPILER x86_64-w64-mingw32-windres )
+  set( CMAKE_RANLIB x86_64-w64-mingw32-ranlib )
+endif()
+if( WIN32 OR CROSS_COMPILE_FOR_WINDOWS )
+  set( FOR_WINDOWS TRUE )
+  set( LIB_NAME ${TARGET_PREFIX}.dll )
+endif()
+
 # Use target folders to organize target list
 set_property( GLOBAL PROPERTY USE_FOLDERS ON )
 
