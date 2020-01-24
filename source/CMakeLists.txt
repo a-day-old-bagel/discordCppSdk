@@ -1,21 +1,22 @@
 set( CMAKE_FOLDER source )
 set( TARGET_NAME ${TARGET_PREFIX} )
 
-# Set DISTRIBUTABLE_INSTALL_DIR in some parent scope if desired
+# Set DISTRIBUTABLE_INSTALL_DIR in some parent scope
 set( DISCORD_INSTALL_DIR ${DISTRIBUTABLE_INSTALL_DIR} )
 if( WIN32 )
   find_library( DISCORD_SDK_LIB discord_game_sdk HINTS ${CMAKE_CURRENT_SOURCE_DIR} )
   list( GET DISCORD_SDK_LIB 0 LIBFILE ) # take first lib
   get_filename_component( LIBFILE_DIR ${LIBFILE} DIRECTORY ) # and get the directory from its path
-  install( FILES ${LIBFILE_DIR}/discord_game_sdk.dll DESTINATION ${DISCORD_INSTALL_DIR} COMPONENT DIST )
+  install( FILES ${LIBFILE_DIR}/discord_game_sdk.dll DESTINATION ./${DISCORD_INSTALL_DIR} COMPONENT DIST )
 elseif( FOR_WINDOWS )
   add_library( dsdk_lib_import SHARED IMPORTED )
   set_target_properties( dsdk_lib_import PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/discord_game_sdk.lib )
-  install( FILES ${CMAKE_CURRENT_SOURCE_DIR}/discord_game_sdk.dll DESTINATION ${DISCORD_INSTALL_DIR} COMPONENT DIST )
+  install( FILES ${CMAKE_CURRENT_SOURCE_DIR}/discord_game_sdk.dll DESTINATION ./${DISCORD_INSTALL_DIR} COMPONENT DIST )
 else()
+  configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/discord_game_sdk.so ${CMAKE_CURRENT_BINARY_DIR} COPYONLY )
   add_library( dsdk_lib_import SHARED IMPORTED )
-  set_target_properties( dsdk_lib_import PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/discord_game_sdk.so )
-  install( FILES ${CMAKE_CURRENT_SOURCE_DIR}/discord_game_sdk.so DESTINATION ${DISCORD_INSTALL_DIR} COMPONENT DIST )
+  set_target_properties( dsdk_lib_import PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_BINARY_DIR}/discord_game_sdk.so )
+  install( FILES ${CMAKE_CURRENT_BINARY_DIR}/discord_game_sdk.so DESTINATION ./${DISCORD_INSTALL_DIR} COMPONENT DIST )
 endif()
 
 add_library( ${LIB_NAME} SHARED

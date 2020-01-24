@@ -35,9 +35,6 @@ endif()
 # Use target folders to organize target list
 set_property( GLOBAL PROPERTY USE_FOLDERS ON )
 
-# Introduce functions to help link to external libs
-include( helpers.cmake )
-
 # Build shared libs
 add_subdirectory( source )
 
