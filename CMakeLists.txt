@@ -27,6 +27,8 @@ endif()
 if( WIN32 OR CROSS_COMPILE_FOR_WINDOWS )
   set( FOR_WINDOWS TRUE )
   set( LIB_NAME ${TARGET_PREFIX}.dll )
+else()
+  set( LIB_NAME ${TARGET_PREFIX} )
 endif()
 
 # Use target folders to organize target list
