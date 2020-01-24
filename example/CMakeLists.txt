@@ -10,19 +10,11 @@ target_include_directories( ${TARGET_NAME} PUBLIC
 if ( FOR_WINDOWS )
   add_custom_command( TARGET ${TARGET_NAME} POST_BUILD
       COMMAND ${CMAKE_COMMAND} -E copy_if_different
-      "${PROJECT_BINARY_DIR}/source/discord.dll"
-      $<TARGET_FILE_DIR:${TARGET_NAME}> )
-  add_custom_command( TARGET ${TARGET_NAME} POST_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy_if_different
-      "${PROJECT_BINARY_DIR}/source/discord_game_sdk.dll"
+      "${PROJECT_SOURCE_DIR}/source/discord_game_sdk.dll"
       $<TARGET_FILE_DIR:${TARGET_NAME}> )
 else ( )
   add_custom_command( TARGET ${TARGET_NAME} POST_BUILD
       COMMAND ${CMAKE_COMMAND} -E copy_if_different
-      "${PROJECT_BINARY_DIR}/source/libdiscord.so"
-      $<TARGET_FILE_DIR:${TARGET_NAME}> )
-  add_custom_command( TARGET ${TARGET_NAME} POST_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy_if_different
-      "${PROJECT_BINARY_DIR}/source/discord_game_sdk.so"
+      "${PROJECT_SOURCE_DIR}/source/discord_game_sdk.so"
       $<TARGET_FILE_DIR:${TARGET_NAME}> )
 endif ( )

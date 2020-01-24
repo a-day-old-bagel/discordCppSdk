@@ -1,30 +1,31 @@
 set( CMAKE_FOLDER source )
 set( TARGET_NAME ${TARGET_PREFIX} )
 
-set( SDK_LIB_DIR ${CMAKE_CURRENT_BINARY_DIR} )
-add_library( ${TARGET_NAME}_game_sdk_lib SHARED IMPORTED GLOBAL )
-if ( FOR_WINDOWS )
-  configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/discord_game_sdk.lib
-    ${SDK_LIB_DIR}/discord_game_sdk.lib COPYONLY
-    )
-  configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/discord_game_sdk.dll
-    ${SDK_LIB_DIR}/discord_game_sdk.dll COPYONLY
-    )
-  set_target_properties( ${TARGET_NAME}_game_sdk_lib PROPERTIES
-      IMPORTED_LOCATION ${SDK_LIB_DIR}/discord_game_sdk.lib
-      )
-  include( GenerateExportHeader )
-else ( )
-  configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/discord_game_sdk.so
-    ${SDK_LIB_DIR}/discord_game_sdk.so COPYONLY
-    )
-  set_target_properties( ${TARGET_NAME}_game_sdk_lib PROPERTIES
-      IMPORTED_LOCATION ${SDK_LIB_DIR}/discord_game_sdk.so
-      )
-endif ( )
-extern( link ${TARGET_NAME}_game_sdk_lib )
-extern( include ${CMAKE_CURRENT_SOURCE_DIR} )
-extern( finish )
+#set( SDK_LIB_DIR ${CMAKE_CURRENT_BINARY_DIR} )
+#add_library( ${TARGET_NAME}_game_sdk_lib SHARED IMPORTED GLOBAL )
+#if ( FOR_WINDOWS )
+#  configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/discord_game_sdk.lib
+#    ${SDK_LIB_DIR}/discord_game_sdk.lib COPYONLY
+#    )
+#  configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/discord_game_sdk.dll
+#    ${SDK_LIB_DIR}/discord_game_sdk.dll COPYONLY
+#    )
+#  set_target_properties( ${TARGET_NAME}_game_sdk_lib PROPERTIES
+#      IMPORTED_LOCATION ${SDK_LIB_DIR}/discord_game_sdk.lib
+#      )
+#else ( )
+#  configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/discord_game_sdk.so
+#    ${SDK_LIB_DIR}/discord_game_sdk.so COPYONLY
+#    )
+#  set_target_properties( ${TARGET_NAME}_game_sdk_lib PROPERTIES
+#      IMPORTED_LOCATION ${SDK_LIB_DIR}/discord_game_sdk.so
+#      )
+#endif ( )
+#extern( link ${TARGET_NAME}_game_sdk_lib )
+#extern( include ${CMAKE_CURRENT_SOURCE_DIR} )
+#extern( finish )
+
+find_library( DISCORD_SDK_LIB discord_game_sdk HINTS ${CMAKE_CURRENT_SOURCE_DIR} )
 
 add_library( ${LIB_NAME} SHARED
   achievement_manager.cpp achievement_manager.h
@@ -46,12 +47,14 @@ add_library( ${LIB_NAME} SHARED
   voice_manager.cpp voice_manager.h
   )
 target_link_libraries( ${LIB_NAME} PRIVATE
-  ${TARGET_NAME}_interface
+#  ${TARGET_NAME}_interface
+  ${DISCORD_SDK_LIB}
   )
 target_include_directories( ${LIB_NAME} PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}
   )
 if( FOR_WINDOWS )
+  include( GenerateExportHeader )
   set_target_properties( ${LIB_NAME} PROPERTIES
     WINDOWS_EXPORT_ALL_SYMBOLS ON
     PREFIX ""
