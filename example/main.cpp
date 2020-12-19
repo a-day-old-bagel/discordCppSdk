@@ -201,6 +201,11 @@ int main(int, char**)
     activity.GetAssets().SetSmallText("i mage");
     activity.GetAssets().SetLargeImage("the");
     activity.GetAssets().SetLargeText("u mage");
+    activity.GetSecrets().SetJoin("join secret");
+    activity.GetParty().GetSize().SetCurrentSize(1);
+    activity.GetParty().GetSize().SetMaxSize(5);
+    activity.GetParty().SetId("party id");
+    activity.GetParty().SetPrivacy(discord::ActivityPartyPrivacy::Public);
     activity.SetType(discord::ActivityType::Playing);
     state.core->ActivityManager().UpdateActivity(activity, [](discord::Result result) {
         std::cout << ((result == discord::Result::Ok) ? "Succeeded" : "Failed")
